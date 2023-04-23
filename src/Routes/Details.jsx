@@ -15,6 +15,7 @@ const networks = {
     symbol: "ETH",
     scan: process.env.ETH_SCAN,
     url: "api.etherscan.io",
+    explorer: "https://etherscan.io/tx/",
   },
   "eth-goerli": {
     apiKey: process.env.ETHEREUM_GOERLI_KEY,
@@ -22,6 +23,7 @@ const networks = {
     symbol: "ETH",
     scan: process.env.ETH_SCAN,
     url: "api-goerli.etherscan.io",
+    explorer: "https://goerli.etherscan.io/tx/",
   },
   "eth-sepolia": {
     apiKey: process.env.ETHEREUM_SEPOLIA_KEY,
@@ -29,6 +31,7 @@ const networks = {
     symbol: "ETH",
     scan: process.env.ETH_SCAN,
     url: "api-sepolia.etherscan.io",
+    explorer: "https://sepolia.etherscan.io/tx/",
   },
   "polygon-mainnet": {
     apiKey: process.env.POLYGON_MAINNET_KEY,
@@ -36,6 +39,7 @@ const networks = {
     symbol: "MATIC",
     scan: process.env.POLYGON_SCAN,
     url: "api.polygonscan.com",
+    explorer: "https://polygonscan.com/tx/",
   },
   "polygon-mumbai": {
     apiKey: process.env.POLYGON_MATIC_KEY,
@@ -43,6 +47,7 @@ const networks = {
     symbol: "MATIC",
     scan: process.env.POLYGON_SCAN,
     url: "api-testnet.polygonscan.com",
+    explorer: "https://mumbai.polygonscan.com/tx/",
   },
   "arb-mainnet": {
     apiKey: process.env.ARBITRUM_MAINNET_KEY,
@@ -50,6 +55,7 @@ const networks = {
     symbol: "ETH",
     scan: process.env.ARB_SCAN,
     url: "api.arbiscan.io",
+    explorer: "https://arbiscan.io/tx/",
   },
   "arb-goerli": {
     apiKey: process.env.ARBITRUM_GOERLI_KEY,
@@ -57,6 +63,7 @@ const networks = {
     symbol: "ETH",
     scan: process.env.ARB_SCAN,
     url: "api-goerli.arbiscan.io",
+    explorer: "https://goerli.arbiscan.io/tx/",
   },
   "opt-mainnet": {
     apiKey: process.env.OPTIMISM_MAINNET_KEY,
@@ -64,6 +71,7 @@ const networks = {
     symbol: "OPT",
     scan: process.env.OPT_SCAN,
     url: "api-optimistic.etherscan.io",
+    explorer: "https://optimistic.etherscan.io/tx/",
   },
 };
 
@@ -95,7 +103,9 @@ const Details = () => {
         {}
       )
       .then((data) => {
-        return data.data.result;
+        return data.data.result
+          .filter((el) => el.from.length > 0 && el.to.length > 0)
+          .reverse();
       })
       .catch(console.log);
 
@@ -133,15 +143,36 @@ const Details = () => {
         <Loader />
       ) : (
         <>
-        <h1
-          style={{
-            fontSize: '42px',
-            fontFamily: 'poppins',
-            color: 'cyan',
-            letterSpacing: '0.5px',
-            opacity: '0.8'
-          }}
-        >{accountDetails.balance + ` ${network.symbol}`}</h1>
+          <span style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            flexDirection: 'column',
+          }}>
+            <span
+              style={{
+                fontSize: "20px",
+                color: "lightgray",
+                fontFamily: "poppins",
+                letterSpacing: "0.5px",
+                opacity: "0.8",
+              }}
+            >
+              Balance{" "}
+            </span>
+            <h1
+              style={{
+                fontSize: "42px",
+                color: "cyan",
+                marginTop: "5px",
+                fontFamily: "poppins",
+                letterSpacing: "0.5px",
+                opacity: "0.8",
+              }}
+            >
+              {accountDetails.balance + ` ${network.symbol}`}
+            </h1>
+          </span>
           <div
             style={{
               display: "flex",
@@ -156,7 +187,6 @@ const Details = () => {
               width: "100%",
             }}
           >
-            
             <span
               style={btnStyle}
               onClick={() => {
@@ -191,7 +221,11 @@ const Details = () => {
             </span>
           </div>
           {active === "Transactions" && (
-            <Transactions transactions={accountDetails.transactions} />
+            <Transactions
+              transactions={accountDetails.transactions}
+              symbol={network.symbol}
+              explorer={network.explorer}
+            />
           )}
           {active === "NFTs" && <NFTs nfts={accountDetails.nftData} />}
           {active === "ERC20_Tokens" && (
