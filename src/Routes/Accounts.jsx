@@ -1,104 +1,28 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import { StateContext } from "../context/Context";
-import { Alchemy } from "alchemy-sdk";
-import optimism from "../assets/optimism.svg";
-import arbitrum from "../assets/arbitrum.svg";
-import polygon from "../assets/polygon.png";
-// import solana from "../assets/solana.svg";
-import ethereum from "../assets/ethereum.png";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Loader from "../components/Loader";
 
 const Accounts = ({ need = true }) => {
-  const url = useParams();
-  console.log({url});
-  const { address, APIs, accountsFound, setAccountsFound } =
-    useContext(StateContext);
-
-  const [loading, setLoading] = useState(false);
+  const {
+    address,
+    APIs,
+    accountsFound,
+    fetchAccounts,
+    formatCurrency,
+    setAlchemyAPIkey,
+    formatTitle,
+    loading,
+    setAddress
+  } = useContext(StateContext);
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchAccounts = async () => {
-      setLoading(true);
-      Promise.all(
-        Object.values(APIs).map(async (el) => {
-          const al = new Alchemy(el);
-          const balance = await al.core.getBalance(
-            address.length > 0 ? address :  url["*"].split("/")[1]
-          );
-          const transactions = await al.core.getTransactionCount(
-            address.length > 0 ? address :  url["*"].split("/")[1]
-          );
-          if (Number(balance) > 0 || transactions > 0) {
-            return [el.network, Number(balance), transactions];
-          }
-        })
-      )
-        .then((data) => {
-          setAccountsFound(
-            data.filter((el) => {
-              return el !== undefined;
-            })
-          );
-          setLoading(false);
-        })
-        .catch(console.log);
-    };
     if (accountsFound.length <= 0) {
       fetchAccounts();
     }
   }, [address]);
-
-  const formatTitle = (title) => {
-    const start =
-      title.split("-")[0].slice(0, 1).toUpperCase() +
-      title.split("-")[0].slice(1);
-    const end =
-      title.split("-")[1].slice(0, 1).toUpperCase() +
-      title.split("-")[1].slice(1);
-    return String(start + " " + end);
-  };
-
-  const chainDetails = {
-    "eth-mainnet": {
-      src: ethereum,
-      symbol: "ETH",
-    },
-    "eth-goerli": {
-      src: ethereum,
-      symbol: "ETH",
-    },
-    "eth-sepolia": {
-      src: ethereum,
-      symbol: "ETH",
-    },
-    "opt-mainnet": {
-      src: optimism,
-      symbol: "OPT",
-    },
-    "polygon-mainnet": {
-      src: polygon,
-      symbol: "MATIC",
-    },
-    "polygon-mumbai": {
-      src: polygon,
-      symbol: "MATIC",
-    },
-    "arb-mainnet": {
-      src: arbitrum,
-      symbol: "ETH",
-    },
-    "arb-goerli": {
-      src: arbitrum,
-      symbol: "ETH",
-    },
-  };
-
-  const formatCurrency = (val) => {
-    return (val / 10 ** 18).toFixed(2);
-  };
 
   return (
     <div
@@ -161,12 +85,13 @@ const Accounts = ({ need = true }) => {
                         "rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px",
                     }}
                     onClick={() => {
-                      navigate(`/${el[0]}/${address}`);
-                      need === false && window.location.reload();
+                      navigate(`/details`);
+                      setAlchemyAPIkey(APIs[`${el[0]}`]);
+                      setAddress(el[3]);
                     }}
                   >
                     <img
-                      src={chainDetails[el[0]].src}
+                      src={APIs[el[0]].src}
                       style={{
                         border: `${
                           el[0].includes("mainnet") ? "1px" : "2px"
@@ -222,7 +147,7 @@ const Accounts = ({ need = true }) => {
                           <span style={{ fontWeight: "500" }}>
                             {formatCurrency(el[1]) +
                               " " +
-                              chainDetails[el[0]].symbol}
+                              APIs[el[0]].symbol}
                           </span>
                         </span>
                       </div>

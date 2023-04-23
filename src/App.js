@@ -6,11 +6,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Hero from './Hero.jsx';
 import Accounts from './Routes/Accounts.jsx';
 
-
-
 function App() {
-
-
 
   return (
     <BrowserRouter>
