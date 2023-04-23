@@ -9,7 +9,7 @@ import Accounts from "./Accounts";
 
 
 const Details = () => {
-  const { address, accountDetails, active, setActive, loading, fetchData, alchemyAPIkey } =
+  const { address, accountDetails, active, setActive, loading, fetchData, alchemyAPIkey, formatTitle } =
     useContext(StateContext);
 
   useEffect(() => {
@@ -48,7 +48,7 @@ const Details = () => {
                 opacity: "0.8",
               }}
             >
-              Balance{" "}
+              Balance: {` ${formatTitle(alchemyAPIkey.network)}`}
             </span>
             <h1
               style={{
