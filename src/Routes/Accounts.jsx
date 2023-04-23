@@ -4,14 +4,17 @@ import { Alchemy } from "alchemy-sdk";
 import optimism from "../assets/optimism.svg";
 import arbitrum from "../assets/arbitrum.svg";
 import polygon from "../assets/polygon.png";
-import solana from "../assets/solana.svg";
+// import solana from "../assets/solana.svg";
 import ethereum from "../assets/ethereum.png";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Loader from "../components/Loader";
 
-const Accounts = () => {
-  const { address, APIs } = useContext(StateContext);
-  const [accountsFound, setAccountsFound] = useState([]);
+const Accounts = ({ need = true }) => {
+  const url = useParams();
+  console.log({url});
+  const { address, APIs, accountsFound, setAccountsFound } =
+    useContext(StateContext);
+
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
@@ -22,8 +25,12 @@ const Accounts = () => {
       Promise.all(
         Object.values(APIs).map(async (el) => {
           const al = new Alchemy(el);
-          const balance = await al.core.getBalance(address);
-          const transactions = await al.core.getTransactionCount(address);
+          const balance = await al.core.getBalance(
+            address.length > 0 ? address :  url["*"].split("/")[1]
+          );
+          const transactions = await al.core.getTransactionCount(
+            address.length > 0 ? address :  url["*"].split("/")[1]
+          );
           if (Number(balance) > 0 || transactions > 0) {
             return [el.network, Number(balance), transactions];
           }
@@ -39,8 +46,9 @@ const Accounts = () => {
         })
         .catch(console.log);
     };
-
-    fetchAccounts();
+    if (accountsFound.length <= 0) {
+      fetchAccounts();
+    }
   }, [address]);
 
   const formatTitle = (title) => {
@@ -119,19 +127,21 @@ const Accounts = () => {
             <Loader />
           ) : (
             <>
-              <span
-                style={{
-                  fontSize: "22px",
-                  fontWeight: "600",
-                  color: "lightcyan",
-                  opacity: "0.7",
-                  letterSpacing: "0.2px",
-                  wordSpacing: "1px",
-                  lineHeight: "40px",
-                }}
-              >
-                Multichain address found
-              </span>
+              {need && (
+                <span
+                  style={{
+                    fontSize: "22px",
+                    fontWeight: "600",
+                    color: "lightcyan",
+                    opacity: "0.7",
+                    letterSpacing: "0.2px",
+                    wordSpacing: "1px",
+                    lineHeight: "40px",
+                  }}
+                >
+                  Multichain address found
+                </span>
+              )}
               {accountsFound.map((el, i) => {
                 return (
                   <div
@@ -152,6 +162,7 @@ const Accounts = () => {
                     }}
                     onClick={() => {
                       navigate(`/${el[0]}/${address}`);
+                      need === false && window.location.reload();
                     }}
                   >
                     <img

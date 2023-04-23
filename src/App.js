@@ -1,5 +1,5 @@
 
-import { useEffect, useState } from 'react';
+import React from 'react';
 import Details from "./Routes/Details.jsx"
 import './App.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';

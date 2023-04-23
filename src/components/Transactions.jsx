@@ -9,13 +9,13 @@ const Transactions = ({ transactions, symbol, explorer }) => {
     const timeDiff = (now - timestamp * 1000) / 1000;
     if (timeDiff >= 86400) {
       const days = Math.floor(timeDiff / 86400);
-      return days + (days == 1 ? " day" : " days") + " ago";
+      return days + (days === 1 ? " day" : " days") + " ago";
     } else if (timeDiff >= 3600) {
       const hours = Math.floor(timeDiff / 3600);
-      return hours + (hours == 1 ? " hour" : " hours") + " ago";
+      return hours + (hours === 1 ? " hour" : " hours") + " ago";
     } else if (timeDiff >= 60) {
       const minutes = Math.floor(timeDiff / 60);
-      return minutes + (minutes == 1 ? " minute" : " minutes") + " ago";
+      return minutes + (minutes === 1 ? " minute" : " minutes") + " ago";
     } else {
       return "Just now";
     }
@@ -29,6 +29,7 @@ const Transactions = ({ transactions, symbol, explorer }) => {
         alignItems: "center",
         flexDirection: "column",
         gap: "15px",
+        marginTop: '30px'
       }}
     >
       <table
@@ -50,7 +51,7 @@ const Transactions = ({ transactions, symbol, explorer }) => {
               textAlign: "left",
             }}
           >
-            <th style={{ padding: "15px 5px 15px 30px" }}>Sl no.</th>
+            <th style={{ padding: "15px 5px 15px 30px" }}>No.</th>
             <th style={{ padding: "15px 15px 15px 30px" }}>Transaction Hash</th>
             <th style={{ padding: "15px 30px 15px 30px" }}>Block</th>
             <th style={{ padding: "15px 40px 15px 20px" }}>Age</th>
@@ -74,7 +75,7 @@ const Transactions = ({ transactions, symbol, explorer }) => {
                   borderBottom: "0.6px solid black",
                 }}
               >
-                <td style={{ padding: "10px", textAlign: 'center' }}>
+                <td style={{ padding: "10px 10px 10px 30px", textAlign: 'center' }}>
                   {transactions.length - i + '.'}
                 </td>
                 <td style={{ padding: "10px 0px 10px 30px" }}>

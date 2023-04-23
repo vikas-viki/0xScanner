@@ -7,6 +7,7 @@ import Loader from "../components/Loader";
 import Transactions from "../components/Transactions";
 import NFTs from "../components/NFTs";
 import Tokens from "../components/Tokens";
+import Accounts from "./Accounts";
 
 const networks = {
   "eth-mainnet": {
@@ -76,9 +77,9 @@ const networks = {
 };
 
 const Details = () => {
+  const url = useParams();
   const { address, accountDetails, setAccountDetails } =
     useContext(StateContext);
-  const url = useParams();
   const network = networks[url["*"].split("/")[0]];
   const [loading, setLoading] = useState(false);
 
@@ -93,13 +94,13 @@ const Details = () => {
 
   const [active, setActive] = useState("transactions");
 
-  const fetchTransaction = async () => {
+  const fetchData = async () => {
     setLoading(true);
     const networkDetails = networks[url["*"].split("/")[0]];
-    const balance = formatCurrency(await alchemy.core.getBalance(address));
+    const balance = formatCurrency(await alchemy.core.getBalance(url["*"].split("/")[1]));
     const transactions = await axios
       .get(
-        `https://${networkDetails.url}/api?module=account&action=txlist&address=${address}&startblock=0&endblock=99999999&page=1&offset=1000&sort=asc&apikey=${networkDetails.scan}`,
+        `https://${networkDetails.url}/api?module=account&action=txlist&address=${url["*"].split("/")[1]}&startblock=0&endblock=99999999&page=1&offset=1000&sort=asc&apikey=${networkDetails.scan}`,
         {}
       )
       .then((data) => {
@@ -109,24 +110,36 @@ const Details = () => {
       })
       .catch(console.log);
 
-    const nftData = await alchemy.nft.getNftsForOwner(address);
+    const nftData = await alchemy.nft.getNftsForOwner(url["*"].split("/")[1]);
 
-    const tokens = await alchemy.core.getTokenBalances(address);
 
-    const tokensMetadata = tokens.tokenBalances.map(async (el) => {
-      return await alchemy.core.getTokenMetadata(el.contractAddress);
+    const tokens = await alchemy.core.getTokenBalances(url["*"].split("/")[1]);
+
+    const tokensMetadata = [];
+    await tokens.tokenBalances.map(async (el) => {
+      alchemy.core
+        .getTokenMetadata(el.contractAddress)
+        .then((data) => {
+          tokensMetadata.push(data);
+        })
+        .catch(console.log);
     });
 
-    await setAccountDetails({ transactions, balance, nftData, tokens });
+    await setAccountDetails({
+      transactions,
+      balance,
+      nftData,
+      tokens,
+      tokensMetadata,
+    });
 
-    console.log({ transactions, balance, nftData, tokens, tokensMetadata });
     setLoading(false);
 
     setActive("Transactions");
   };
 
   useEffect(() => {
-    fetchTransaction();
+    fetchData();
   }, [address]);
   return (
     <div
@@ -143,12 +156,14 @@ const Details = () => {
         <Loader />
       ) : (
         <>
-          <span style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            flexDirection: 'column',
-          }}>
+          <span
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              flexDirection: "column",
+            }}
+          >
             <span
               style={{
                 fontSize: "20px",
@@ -229,8 +244,12 @@ const Details = () => {
           )}
           {active === "NFTs" && <NFTs nfts={accountDetails.nftData} />}
           {active === "ERC20_Tokens" && (
-            <Tokens tokens={accountDetails.tokens} />
+            <Tokens
+              tokens={accountDetails.tokens}
+              tokensMetadata={accountDetails.tokensMetadata}
+            />
           )}
+          {active === "Multichain_Address" && <Accounts need={false} />}
         </>
       )}
     </div>

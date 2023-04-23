@@ -44,7 +44,7 @@ const Context = ({ children }) => {
   const [address, setAddress] = useState("");
   const [url, setUrl] = useState(useParams());
   const alchemy = new Alchemy(alchemyAPIkey);
-
+  const [accountsFound, setAccountsFound] = useState([]);
   const [accountDetails, setAccountDetails] = useState({});
 
   return (
@@ -53,12 +53,15 @@ const Context = ({ children }) => {
         address,
         setAddress,
         setAlchemyAPIkey,
+        alchemyAPIkey,
         APIs,
         alchemy,
         accountDetails,
         setAccountDetails,
         url,
         setUrl,
+        accountsFound,
+        setAccountsFound,
       }}
     >
       {children}
