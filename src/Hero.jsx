@@ -47,7 +47,7 @@ const Hero = () => {
               textAlign: 'center'
             }}
           >
-            Scans you address completely, including your balance, transactions,
+            Scans your address completely, including your balance, transactions,
             ERC20 tokens, NFTs, and other relevant data, in a standardized
             manner.
           </span>
