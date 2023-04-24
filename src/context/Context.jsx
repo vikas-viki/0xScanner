@@ -45,7 +45,7 @@ const APIs = {
     scan: process.env.POLYGON_SCAN,
     url: "api.polygonscan.com",
     explorer: "https://polygonscan.com/tx/",
-    src: optimism,
+    src: polygon,
   },
   "polygon-mumbai": {
     apiKey: process.env.POLYGON_MATIC_KEY,
@@ -63,7 +63,7 @@ const APIs = {
     scan: process.env.ARB_SCAN,
     url: "api.arbiscan.io",
     explorer: "https://arbiscan.io/tx/",
-    src: polygon,
+    src: arbitrum,
   },
   "arb-goerli": {
     apiKey: process.env.ARBITRUM_GOERLI_KEY,
@@ -81,7 +81,7 @@ const APIs = {
     scan: process.env.OPT_SCAN,
     url: "api-optimistic.etherscan.io",
     explorer: "https://optimistic.etherscan.io/tx/",
-    src: arbitrum,
+    src: optimism,
   },
 };
 
