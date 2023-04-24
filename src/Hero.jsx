@@ -1,10 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
 import { StateContext } from "./context/Context";
-import { useParams } from "react-router-dom";
 
 const Hero = () => {
   
-  const { setAddress, url, setUrl } = useContext(StateContext);
+  const { setAddress, setUrl } = useContext(StateContext);
   const [addr, setAddr] = useState("");
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -37,7 +36,7 @@ const Hero = () => {
       >
         0xScanner
       </h2>
-      { (url.length > 1 ? url.split("/").length < 0 : true) && (
+      { (!window.location.href.includes('details')) && (
         <>
           <span
             style={{
@@ -45,6 +44,7 @@ const Hero = () => {
               letterSpacing: "0.5px",
               fontFamily: "poppins",
               color: "#576CBC",
+              textAlign: 'center'
             }}
           >
             Scans you address completely, including your balance, transactions,

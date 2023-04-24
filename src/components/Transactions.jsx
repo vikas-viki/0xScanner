@@ -53,13 +53,13 @@ const Transactions = ({ transactions, symbol, explorer }) => {
           >
             <th style={{ padding: "15px 5px 15px 30px" }}>No.</th>
             <th style={{ padding: "15px 15px 15px 30px" }}>Transaction Hash</th>
-            <th style={{ padding: "15px 30px 15px 30px" }}>Block</th>
-            <th style={{ padding: "15px 40px 15px 20px" }}>Age</th>
-            <th style={{ padding: "15px 30px 15px 30px" }}>From</th>
-            <th style={{ padding: "15px 30px 15px 30px" }}>🤔</th>
-            <th style={{ padding: "15px 30px 15px 30px" }}>To</th>
+            <th style={{ padding: "15px 30px 15px 30px" }} className="txn-block">Block</th>
+            <th style={{ padding: "15px 40px 15px 20px" }} className="txn-age">Age</th>
+            <th style={{ padding: "15px 30px 15px 30px" }} className="txn-from">From</th>
+            <th style={{ padding: "15px 30px 15px 30px" }} className="txn-in-out">🤔</th>
+            <th style={{ padding: "15px 30px 15px 30px" }} className="txn-to">To</th>
             <th style={{ padding: "15px 30px 15px 30px" }}>Value</th>
-            <th style={{ padding: "15px 30px 15px 30px" }}>Txn Fee</th>
+            <th style={{ padding: "15px 30px 15px 30px" }} className="txn-fee" >Txn Fee</th>
           </tr>
         </thead>
         <tbody>
@@ -83,9 +83,9 @@ const Transactions = ({ transactions, symbol, explorer }) => {
                   {el.hash.slice(0, 15) + "..."}
                   </a>
                 </td>
-                <td style={{ padding: "10px 30px 10px 30px" }}>{Number(el.blockNumber)}</td>
-                <td style={{fontWeight: '600', opacity: '0.9'}}>{getTimeElapsed(el.timeStamp)}</td>
-                <td style={{ padding: "10px 30px 10px 30px" }}>
+                <td style={{ padding: "10px 30px 10px 30px" }} className="txn-block">{Number(el.blockNumber)}</td>
+                <td style={{fontWeight: '600', opacity: '0.9'}} className="txn-age">{getTimeElapsed(el.timeStamp)}</td>
+                <td style={{ padding: "10px 30px 10px 30px" }} className="txn-from">
                   {el.from.slice(0, 20) + "..."}
                 </td>
                 <td
@@ -96,8 +96,9 @@ const Transactions = ({ transactions, symbol, explorer }) => {
                     justifyContent: "center",
                     alignItems: "center",
                   }}
+                  className="txn-in-out"
                 >
-                  <span
+                  <span 
                     style={{
                       fontSize: "12px",
                       textAlign: "center",
@@ -119,11 +120,11 @@ const Transactions = ({ transactions, symbol, explorer }) => {
                     {el.to.includes(address.toLowerCase()) ? "IN" : "OUT"}
                   </span>
                 </td>
-                <td style={{ padding: "10px 30px 10px 30px" }}>{el.to.slice(0, 20) + "..."}</td>
+                <td style={{ padding: "10px 30px 10px 30px" }} className="txn-to">{el.to.slice(0, 20) + "..."}</td>
                 <td style={{ padding: "10px 30px 10px 30px", color: '#0062ff', fontWeight: '600', letterSpacing: '0.7px' }}>
                   {(el.value / 10 ** 18).toFixed(4) + " " + symbol}
                 </td>
-                <td style={{ padding: "10px 30px 10px 30px", opacity: '0.8' }}>
+                <td style={{ padding: "10px 30px 10px 30px", opacity: '0.8' }} className="txn-fee" >
                   {((el.gasPrice * el.gasUsed) / 10 ** 18).toFixed(6)}
                 </td>
               </tr>

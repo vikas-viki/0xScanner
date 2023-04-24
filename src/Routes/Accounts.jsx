@@ -44,6 +44,7 @@ const Accounts = ({ need = true }) => {
             gap: "35px",
             alignItems: "center",
             fontFamily: "poppins",
+            flexWrap: 'wrap',
             width: "100%",
           }}
         >
@@ -83,6 +84,7 @@ const Accounts = ({ need = true }) => {
                       cursor: "pointer",
                       boxShadow:
                         "rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px",
+                        maxWidth: '1000px'
                     }}
                     onClick={() => {
                       navigate(`/details`);
@@ -132,9 +134,10 @@ const Accounts = ({ need = true }) => {
                           justifyContent: "space-between",
                           alignItems: "center",
                           gap: "30px",
+                          flexWrap: 'wrap'
                         }}
                       >
-                        <span>
+                        <span className="rem-650">
                           Found by address:{" "}
                           <span style={{ fontWeight: "500" }}>{address}</span>
                         </span>

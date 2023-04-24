@@ -9,7 +9,7 @@ import Accounts from './Routes/Accounts.jsx';
 function App() {
 
   return (
-    <HashRouter basename='/'>
+    <HashRouter >
       <Hero />
       <Routes>
         <Route path='/details' element={<Details />} />

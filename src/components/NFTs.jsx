@@ -27,13 +27,14 @@ const NFTs = ({ nfts }) => {
                 justifyContent: "center",
                 alignItems: "center",
                 flexWrap: "wrap",
-                width: "1000px",
+                maxWidth: "1000px",
                 wordBreak: "break-word",
                 backgroundColor: "#61A6F6",
                 padding: "20px",
                 borderRadius: "5px",
                 fontFamily: "poppins",
               }}
+              className="nft"
             >
               <img
                 src={el.media[0].thumbnail || el.rawMetadata.image || def_nft}
