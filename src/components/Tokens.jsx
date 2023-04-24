@@ -13,8 +13,25 @@ const Tokens = ({ tokens, tokensMetadata }) => {
     return balance;
   }
   
-  console.log({ tokens, tokensMetadata });
   return (
+    <>
+    <span
+        style={{
+          fontSize: "20px",
+          fontFamily: "poppins",
+          color: "#fff",
+          justifySelf: "flex-end",
+          width: "100%",
+          textAlign: "right",
+          maxWidth: '1100px'
+        }}
+      >
+        Total:{" "}
+        {tokensMetadata.length === 100
+          ? tokensMetadata.length + "+"
+          : tokensMetadata.length}
+      </span>
+    
     <div
       style={{
         display: "flex",
@@ -63,6 +80,7 @@ const Tokens = ({ tokens, tokensMetadata }) => {
         );
       })}
     </div>
+    </>
   );
 };
 

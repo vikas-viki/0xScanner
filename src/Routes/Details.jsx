@@ -75,7 +75,8 @@ const Details = () => {
               paddingBottom: "20px",
               borderBottom: "2px solid lightgray",
               width: "100%",
-              flexWrap: 'wrap'
+              flexWrap: 'wrap',
+              maxWidth: '1100px'
             }}
           >
             <span
