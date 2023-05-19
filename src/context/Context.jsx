@@ -4,21 +4,21 @@ import { useParams } from "react-router-dom";
 import optimism from "../assets/optimism.svg";
 import arbitrum from "../assets/arbitrum.svg";
 import polygon from "../assets/polygon.png";
-// import solana from "../assets/solana.svg";
 import ethereum from "../assets/ethereum.png";
+// import solana from "../assets/solana.svg";
 import axios from "axios";
 
 export const StateContext = createContext();
 
 const APIs = {
   "eth-mainnet": {
-    apiKey: process.env.ETHEREUM_MAINNET_KEY,
-    network: Network.ETH_MAINNET,
-    symbol: "ETH",
-    scan: process.env.ETH_SCAN,
-    url: "api.etherscan.io",
-    explorer: "https://etherscan.io/tx/",
-    src: ethereum,
+    apiKey: process.env.ETHEREUM_MAINNET_KEY, // alchemy api key, for fetching data.
+    network: Network.ETH_MAINNET, // network specification for fetching data.
+    symbol: "ETH", // Symbol of the network.
+    scan: process.env.ETH_SCAN, // API key for transactions fetching like etherscan and all.
+    url: "api.etherscan.io", // URL for fetching transactions.
+    explorer: "https://etherscan.io/tx/", // URL for redirecting user to redirect to transactions.
+    src: ethereum, // image of the network.
   },
   "eth-goerli": {
     apiKey: process.env.ETHEREUM_GOERLI_KEY,
